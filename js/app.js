@@ -103,6 +103,20 @@ $( document ).ready(function() {
         }
     }
 
+    function playSessionSound(){
+        if($("#sound").hasClass("fa-volume-up")){
+            var audioElement = document.createElement('audio');
+            audioElement.setAttribute('src', 'http://k003.kiwi6.com/hotlink/va19h1zq3h/session-time.mp3');
+            audioElement.play();
+        }
+    }
 
+    function playBreakSound(){
+        if($("#sound").hasClass("fa-volume-up")){
+            var audioElement = document.createElement('audio');
+            audioElement.setAttribute('src', 'http://k003.kiwi6.com/hotlink/w0r8fvy112/break-time.mp3');
+            audioElement.play();
+        }
+    }
 
 });
