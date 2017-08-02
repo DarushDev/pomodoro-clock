@@ -1,0 +1,10 @@
+body {
+    background-color: #353535;
+    color:#fff;
+    text-align:center;
+}
+
+.my-btn:hover {
+    color:#9ACC02;
+    cursor:pointer;
+}
