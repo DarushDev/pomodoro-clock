@@ -54,4 +54,55 @@ $( document ).ready(function() {
 
 
 
+    function breakTimerFunction(){
+        breakLength = breakLength -1;
+
+        var percent = 360 - (360 * breakLength) / ($("#break-slider").val()*60);
+        $("#circle").children("svg").eq(0).children("circle").eq(1).css("stroke-dasharray", percent + ", 20000");
+
+        var minutes = ("0" + Math.floor(breakLength / 60)).slice(-2);
+        var seconds = ("0" + breakLength % 60).slice(-2);
+        $(".timer").text(minutes + ":" + seconds);
+
+        if(breakLength <= 0){
+            $("#circle").children("svg").eq(0).children("circle").eq(2).css({fill:"#353535"});//change circle center point color
+            clearInterval(breakTimer);
+            playSessionSound();
+            isSession = true;
+            breakLength = $('#break-slider').val() * 60;
+            $("#circle").children("svg").eq(0).children("circle").eq(1).css({
+                "stroke-dasharray":"0, 20000",
+                "stroke":"#9ACC02"
+            });//reset circle percentage
+            sessionTimer = setInterval(sessionTimerFunction, 1000);
+        }
+    }
+
+    function sessionTimerFunction(){
+        sessionLength = sessionLength - 1;
+
+        var percent = 360 - (360 * sessionLength) / ($("#session-slider").val()*60);
+        $("#circle").children("svg").eq(0).children("circle").eq(1).css("stroke-dasharray", percent + ", 20000");
+
+        var minutes = ("0" + Math.floor(sessionLength / 60)).slice(-2);
+        var seconds = ("0" + sessionLength % 60).slice(-2);
+        var time = minutes + ":"+seconds;
+        $(".timer").text(time);
+
+        if(sessionLength <= 0){
+            $("#circle").children("svg").eq(0).children("circle").eq(2).css({fill:"#FF4545"});//change circle center point color
+            clearInterval(sessionTimer);
+            playBreakSound();
+            isSession = false;
+            sessionLength = $('#session-slider').val() * 60;
+            $("#circle").children("svg").eq(0).children("circle").eq(1).css({
+                "stroke-dasharray":"0, 20000",
+                "stroke":"#FF4545"
+            });//reset circle percentage
+            breakTimer = setInterval(breakTimerFunction , 1000);
+        }
+    }
+
+
+
 });
