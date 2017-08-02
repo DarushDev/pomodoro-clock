@@ -52,6 +52,29 @@ $( document ).ready(function() {
     });
 
 
+    $("#pause").hide();
+    $("#stop").hide();
+
+
+    $("#play").click(function(){
+
+        $("#play").hide();
+        $("#pause").show();
+        $("#stop").show();
+
+        if(isSession){
+            sessionTimer = setInterval(sessionTimerFunction, 1000);
+        } else {
+            breakTimer = setInterval(breakTimerFunction, 1000);
+        }
+
+
+        $("#break-slider").prop("disabled", true);
+        $("#break-slider").rangeslider('update');
+        $("#session-slider").prop("disabled", true);
+        $("#session-slider").rangeslider('update');
+    });
+
 
 
     function breakTimerFunction(){
