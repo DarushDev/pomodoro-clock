@@ -4,22 +4,28 @@ $( document ).ready(function() {
 
     var sessionTimer;
     var breakTimer;
-    var breakLength = $('#break-slider').val() * 60;
-    var sessionLength = $('#session-slider').val() * 60;
+    var breakSlider = $("#break-slider");
+    var sessionSlider = $("#session-slider");
+    var btnPause = $("#pause");
+    var btnStop = $("#stop");
+    var circleProgress = $("#circle");
+
+    var breakLength = breakSlider.val() * 60;
+    var sessionLength = sessionSlider.val() * 60;
     var isSession = true;
 
     $("#sound").click(function(){
         $(this).toggleClass("fa-volume-up fa-volume-off");
     });
 
-    $('#break-slider').rangeslider({
+    breakSlider.rangeslider({
         polyfill: false
     }).on('input', function() {
         $("#break-output").text(this.value);
         breakLength = this.value * 60;
     });
 
-    $('#session-slider').rangeslider({
+    sessionSlider.rangeslider({
         polyfill: false
     }).on('input', function() {
         $("#session-output").text(this.value);
@@ -27,7 +33,7 @@ $( document ).ready(function() {
         sessionLength = this.value * 60;
     });
 
-    $("#circle").circliful({
+    circleProgress.circliful({
         start:100,
         percent: 0,
         //text: "Session", //info text shown bellow the percentage in the circle
@@ -52,15 +58,15 @@ $( document ).ready(function() {
     });
 
 
-    $("#pause").hide();
-    $("#stop").hide();
+    btnPause.hide();
+    btnStop.hide();
 
 
     $("#play").click(function(){
 
         $("#play").hide();
-        $("#pause").show();
-        $("#stop").show();
+        btnPause.show();
+        btnStop.show();
 
         if(isSession){
             sessionTimer = setInterval(sessionTimerFunction, 1000);
@@ -69,59 +75,59 @@ $( document ).ready(function() {
         }
 
 
-        $("#break-slider").prop("disabled", true);
-        $("#break-slider").rangeslider('update');
-        $("#session-slider").prop("disabled", true);
-        $("#session-slider").rangeslider('update');
+        breakSlider.prop("disabled", true);
+        breakSlider.rangeslider('update');
+        sessionSlider.prop("disabled", true);
+        sessionSlider.rangeslider('update');
     });
 
-    $("#pause").click(function(){
+    btnPause.click(function(){
         clearInterval(sessionTimer);
         clearInterval(breakTimer);
-        $("#pause").hide();
+        btnPause.hide();
         $("#play").show();
     });
 
-    $("#stop").click(function(){
-        $("#circle").children("svg").eq(0).children("circle").eq(2).css({fill:"#353535"});//change circle center point color
+    btnStop.click(function(){
+        circleProgress.children("svg").eq(0).children("circle").eq(2).css({fill:"#353535"});//change circle center point color
         clearInterval(sessionTimer); //stop session timer if running
         clearInterval(breakTimer); //stop break timer if running
-        $(".timer").text(("0" + $('#session-slider').val()).slice(-2) + ":00"); // reset timer text
-        sessionLength = $('#session-slider').val() * 60; //reset sessionLength
-        breakLength = $('#break-slider').val() * 60; //reset breakLength
+        $(".timer").text(("0" + sessionSlider.val()).slice(-2) + ":00"); // reset timer text
+        sessionLength = sessionSlider.val() * 60; //reset sessionLength
+        breakLength = breakSlider.val() * 60; //reset breakLength
         isSession = true; //start timer with session first
-        $("#circle").children("svg").eq(0).children("circle").eq(1).css({
+        circleProgress.children("svg").eq(0).children("circle").eq(1).css({
             "stroke-dasharray":"0, 20000",
             "stroke":"#9ACC02"
         });//reset circle percentage
 
-        $("#stop").hide();
-        $("#pause").hide();
+        btnStop.hide();
+        btnPause.hide();
         $("#play").show();
-        $("#break-slider").prop("disabled", false);
-        $("#break-slider").rangeslider('update');
-        $("#session-slider").prop("disabled", false);
-        $("#session-slider").rangeslider('update');
+        breakSlider.prop("disabled", false);
+        breakSlider.rangeslider('update');
+        sessionSlider.prop("disabled", false);
+        sessionSlider.rangeslider('update');
 
     });
 
     function breakTimerFunction(){
         breakLength = breakLength -1;
 
-        var percent = 360 - (360 * breakLength) / ($("#break-slider").val()*60);
-        $("#circle").children("svg").eq(0).children("circle").eq(1).css("stroke-dasharray", percent + ", 20000");
+        var percent = 360 - (360 * breakLength) / (breakSlider.val()*60);
+        circleProgress.children("svg").eq(0).children("circle").eq(1).css("stroke-dasharray", percent + ", 20000");
 
         var minutes = ("0" + Math.floor(breakLength / 60)).slice(-2);
         var seconds = ("0" + breakLength % 60).slice(-2);
         $(".timer").text(minutes + ":" + seconds);
 
         if(breakLength <= 0){
-            $("#circle").children("svg").eq(0).children("circle").eq(2).css({fill:"#353535"});//change circle center point color
+            circleProgress.children("svg").eq(0).children("circle").eq(2).css({fill:"#353535"});//change circle center point color
             clearInterval(breakTimer);
             playSessionSound();
             isSession = true;
-            breakLength = $('#break-slider').val() * 60;
-            $("#circle").children("svg").eq(0).children("circle").eq(1).css({
+            breakLength = breakSlider.val() * 60;
+            circleProgress.children("svg").eq(0).children("circle").eq(1).css({
                 "stroke-dasharray":"0, 20000",
                 "stroke":"#9ACC02"
             });//reset circle percentage
@@ -132,8 +138,8 @@ $( document ).ready(function() {
     function sessionTimerFunction(){
         sessionLength = sessionLength - 1;
 
-        var percent = 360 - (360 * sessionLength) / ($("#session-slider").val()*60);
-        $("#circle").children("svg").eq(0).children("circle").eq(1).css("stroke-dasharray", percent + ", 20000");
+        var percent = 360 - (360 * sessionLength) / (sessionSlider.val()*60);
+        circleProgress.children("svg").eq(0).children("circle").eq(1).css("stroke-dasharray", percent + ", 20000");
 
         var minutes = ("0" + Math.floor(sessionLength / 60)).slice(-2);
         var seconds = ("0" + sessionLength % 60).slice(-2);
@@ -141,12 +147,12 @@ $( document ).ready(function() {
         $(".timer").text(time);
 
         if(sessionLength <= 0){
-            $("#circle").children("svg").eq(0).children("circle").eq(2).css({fill:"#FF4545"});//change circle center point color
+            circleProgress.children("svg").eq(0).children("circle").eq(2).css({fill:"#FF4545"});//change circle center point color
             clearInterval(sessionTimer);
             playBreakSound();
             isSession = false;
             sessionLength = $('#session-slider').val() * 60;
-            $("#circle").children("svg").eq(0).children("circle").eq(1).css({
+            circleProgress.children("svg").eq(0).children("circle").eq(1).css({
                 "stroke-dasharray":"0, 20000",
                 "stroke":"#FF4545"
             });//reset circle percentage
