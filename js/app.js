@@ -75,7 +75,35 @@ $( document ).ready(function() {
         $("#session-slider").rangeslider('update');
     });
 
+    $("#pause").click(function(){
+        clearInterval(sessionTimer);
+        clearInterval(breakTimer);
+        $("#pause").hide();
+        $("#play").show();
+    });
 
+    $("#stop").click(function(){
+        $("#circle").children("svg").eq(0).children("circle").eq(2).css({fill:"#353535"});//change circle center point color
+        clearInterval(sessionTimer); //stop session timer if running
+        clearInterval(breakTimer); //stop break timer if running
+        $(".timer").text(("0" + $('#session-slider').val()).slice(-2) + ":00"); // reset timer text
+        sessionLength = $('#session-slider').val() * 60; //reset sessionLength
+        breakLength = $('#break-slider').val() * 60; //reset breakLength
+        isSession = true; //start timer with session first
+        $("#circle").children("svg").eq(0).children("circle").eq(1).css({
+            "stroke-dasharray":"0, 20000",
+            "stroke":"#9ACC02"
+        });//reset circle percentage
+
+        $("#stop").hide();
+        $("#pause").hide();
+        $("#play").show();
+        $("#break-slider").prop("disabled", false);
+        $("#break-slider").rangeslider('update');
+        $("#session-slider").prop("disabled", false);
+        $("#session-slider").rangeslider('update');
+
+    });
 
     function breakTimerFunction(){
         breakLength = breakLength -1;
