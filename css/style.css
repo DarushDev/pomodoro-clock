@@ -8,3 +8,20 @@ body {
     color:#9ACC02;
     cursor:pointer;
 }
+
+.output {
+    font-size: 30px;
+    color: #fff;
+}
+
+#circle-main {
+    position: relative;
+}
+
+.rangeslider {
+    margin: 0 auto;
+}
+
+.rangeslider__fill {
+    background: #9ACC02;
+}
